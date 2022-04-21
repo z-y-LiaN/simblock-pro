@@ -2,6 +2,7 @@ package simblock.simulator;
 
 
 import static simblock.settings.NetworkConfiguration.HASHRATE_LIST;
+import static simblock.settings.NetworkConfiguration.REGION_KIND_LIST;
 import static simblock.settings.SimulationConfiguration.ALGO;
 import static simblock.settings.SimulationConfiguration.AVERAGE_MINING_POWER;
 import static simblock.settings.SimulationConfiguration.END_BLOCK_HEIGHT;
@@ -101,7 +102,7 @@ public class Main {
         // 打印区域
         printRegion();
 
-        // 构建指定数量的区块链网络
+        // 构建指定数量的区块链网络,这里路径之后可以改一下
         String filePath = "D:\\Desktop\\2022信安\\simblock-master\\simblock-master\\simulator\\src\\dist\\conf\\init_data.json";
         constructNetworkWithGivenFile(filePath);
 //    constructNetworkWithAllNodes(NUM_OF_NODES);
@@ -295,6 +296,7 @@ public class Main {
 
         return Math.max((int) (r * STDEV_OF_MINING_POWER + AVERAGE_MINING_POWER), 1);
     }
+
     /**
      * 重写genMiningPower方法，每个region的哈希率成比例，region内的哈希率成Gaussion分布
      * calculation) executed per millisecond.
@@ -304,7 +306,7 @@ public class Main {
     public static int genMiningPower(Integer regionID) {
         double r = random.nextGaussian();
 
-        return Math.max((int) (r * STDEV_OF_MINING_POWER + AVERAGE_MINING_POWER)*HASHRATE_LIST[regionID], 1);
+        return Math.max((int) (r * STDEV_OF_MINING_POWER + AVERAGE_MINING_POWER) * HASHRATE_LIST[regionID], 1);
     }
 
 
@@ -418,14 +420,11 @@ public class Main {
         ArrayList<Integer> regionList = new ArrayList<>();
         ArrayList<ArrayList<Integer>> neighborList = new ArrayList<ArrayList<Integer>>();
 
-        String[] regionArray = {
-                "中国", "美国", "俄罗斯",
-                "哈萨克斯坦", "其他", "加拿大", "马来西亚",
-                "伊朗", "德国", "爱尔兰"
-        };
-
-        Integer node_total = (Integer) jobj.get("Num");//这里可以改一下，反正现在能运行，先完成再后面完善
-        /* 处理json中的每一个节点 */
+        Integer node_total = (Integer) jobj.get("Num");
+        NUM_OF_NODES = node_total;
+        /**
+         *  处理json中的每一个节点
+         */
         for (int i = 1; i <= node_total; i++) {
             String name = "nodeNum_" + i;
             JSONObject nodeInfo = jobj.getJSONObject(name);
@@ -434,8 +433,8 @@ public class Main {
             degreeList.add(node_degree);
             //区域
             String region = (String) nodeInfo.get("region");
-            for (int j = 0; j < regionArray.length; j++) {
-                if (regionArray[j].equals(region))
+            for (int j = 0; j < REGION_KIND_LIST.length; j++) {
+                if (REGION_KIND_LIST[j].equals(region))
                     regionList.add(j);
             }
             //邻居

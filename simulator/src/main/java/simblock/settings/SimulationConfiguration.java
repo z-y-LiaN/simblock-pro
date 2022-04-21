@@ -11,9 +11,10 @@ public class SimulationConfiguration {
    * 这个模拟的区块链网络的 初始的节点数量
    */
   //TODO revert
-
-  public static final int NUM_OF_NODES = 356;//300;//600;//800;//6000;
+//  暂时不把它设成final
+  public static  int NUM_OF_NODES = 356;//300;//600;//800;//6000;
   // public static final int NUM_OF_NODES = 600;//600;//800;//6000;
+
 
   /**
    * The kind of routing table. 路由表类型
