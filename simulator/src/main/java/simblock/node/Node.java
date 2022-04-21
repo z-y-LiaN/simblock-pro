@@ -253,7 +253,12 @@ public class Node {
   public void joinNetwork() {
     this.routingTable.initTable();
   }
-
+  /**
+   * 重写joinNetWork()
+   */
+  public void joinNetwork(ArrayList<Integer> neighbors) {
+    this.routingTable.initTable(neighbors);
+  }
   /**
    * Mint the genesis block.
    */

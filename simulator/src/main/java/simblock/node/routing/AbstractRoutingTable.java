@@ -66,6 +66,7 @@ public abstract class AbstractRoutingTable {
    * Table initialization.
    */
   public abstract void initTable();
+  public abstract void initTable(ArrayList<Integer> neighbors);
 
   /**
    * Gets neighbors.

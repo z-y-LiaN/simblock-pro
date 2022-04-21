@@ -16,14 +16,9 @@ import simblock.node.Node;
 @SuppressWarnings("unused")
 public class BitcoinCoreTable extends AbstractRoutingTable {
 
-  /**
-   * The list of outbound connections.
-   */
+
   private final ArrayList<Node> outbound = new ArrayList<>();
 
-  /**
-   * The list of inbound connections.
-   */
   private final ArrayList<Node> inbound = new ArrayList<>();
 
   /**
@@ -69,6 +64,17 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
       }
     }
   }
+  /**
+   * 重写初始化节点路由表的代码
+   */
+  public void initTable(ArrayList<Integer> neighbors){
+    for(int node_Num:neighbors){
+      //记得这里要-1！！！这个bug我tmd找了半个小时，气死了QAQ
+      this.addNeighbor(getSimulatedNodes().get(node_Num-1));
+
+    }
+  }
+
 
   /**
    * Adds the provided node to the list of outbound connections of self node.The provided node
@@ -83,7 +89,7 @@ public class BitcoinCoreTable extends AbstractRoutingTable {
    */
   public boolean addNeighbor(Node node) {
     if (node == getSelfNode() || this.outbound.contains(node) || this.inbound.contains(
-        node) || this.outbound.size() >= this.getNumConnection()) {
+        node) ) {//|| this.outbound.size() >= this.getNumConnection()
       return false;
     } else if (this.outbound.add(node) && node.getRoutingTable().addInbound(getSelfNode())) {
       printAddLink(node);
