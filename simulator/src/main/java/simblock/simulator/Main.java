@@ -438,8 +438,8 @@ public class Main {
        OUT_JSON_FILE.print("}");
        OUT_JSON_FILE.print("},");
        OUT_JSON_FILE.flush();
-
      }
+//     check here
 
      // 模拟节点列表中的节点加入区块链网络,也就是在初始化节点的路由表
      for (Node node : getSimulatedNodes()) {
