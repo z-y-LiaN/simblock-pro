@@ -1,6 +1,7 @@
 package simblock.simulator;
 
 
+import static simblock.settings.NetworkConfiguration.HASHRATE_LIST;
 import static simblock.settings.SimulationConfiguration.ALGO;
 import static simblock.settings.SimulationConfiguration.AVERAGE_MINING_POWER;
 import static simblock.settings.SimulationConfiguration.END_BLOCK_HEIGHT;
@@ -294,6 +295,18 @@ public class Main {
 
         return Math.max((int) (r * STDEV_OF_MINING_POWER + AVERAGE_MINING_POWER), 1);
     }
+    /**
+     * 重写genMiningPower方法，每个region的哈希率成比例，region内的哈希率成Gaussion分布
+     * calculation) executed per millisecond.
+     *
+     * @return the number of hash  calculations executed per millisecond.
+     */
+    public static int genMiningPower(Integer regionID) {
+        double r = random.nextGaussian();
+
+        return Math.max((int) (r * STDEV_OF_MINING_POWER + AVERAGE_MINING_POWER)*HASHRATE_LIST[regionID], 1);
+    }
+
 
     /**
      * 根据所提供的节点数量 构建网络;
@@ -436,9 +449,10 @@ public class Main {
 
         for (int id = 1; id <= node_total; id++) {
             Node node = new Node(
-                    id, degreeList.get(id - 1) + 1, regionList.get(id - 1), genMiningPower(), TABLE,
+                    id, degreeList.get(id - 1) + 1, regionList.get(id - 1), genMiningPower(regionList.get(id - 1)), TABLE,
                     ALGO, useCBRNodes.get(id - 1), churnNodes.get(id - 1)
             );
+//            System.out.println("算力： "+node.getMiningPower());
             // 将模拟节点添加到模拟节点列表中
             addNode(node);
             OUT_JSON_FILE.print("{");

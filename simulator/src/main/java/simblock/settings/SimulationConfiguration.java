@@ -30,7 +30,7 @@ public class SimulationConfiguration {
   /**
    * The expected value of block generation interval. The difficulty of mining is automatically
    * adjusted by this value and the sum of mining power. (unit: millisecond)
-   * 块生成间隔的期望值。The difficulty of mining 由该值与 mining power之和自动调整。(单位:毫秒)
+   * 块生成的时间间隔。The difficulty of mining 由该值与 mining power之和自动调整。(单位:毫秒)
    */
   public static final long INTERVAL = 1000 * 60 * 10;//1000*60;//1000*30*5;//1000*60*10;
 
@@ -39,15 +39,15 @@ public class SimulationConfiguration {
    * is the number of mining (hash calculation) executed per millisecond.
    * 每个节点的average mining power。mining power相当于比特币中的哈希率，是每毫秒执行的挖掘(哈希计算)的数量。
    */
-  public static final int AVERAGE_MINING_POWER = 400000;
+  public static final int AVERAGE_MINING_POWER = 4000;//400000;
 
   /**
-   * The mining power of each node is determined randomly according to the normal distribution
+   * The mining power of each node is determined randomly according to the normal distribution(也就是高斯分布
    * whose average is AVERAGE_MINING_POWER and standard deviation is STDEV_OF_MINING_POWER.
    * 每个节点的mining power根据正态分布随机确定，
    * 其平均值为AVERAGE_MINING_POWER，标准差为STDEV_OF_MINING_POWER。
    */
-  public static final int STDEV_OF_MINING_POWER = 100000;
+  public static final int STDEV_OF_MINING_POWER = 1000;//100000;
 
   /**
    * The constant AVERAGE_COINS.

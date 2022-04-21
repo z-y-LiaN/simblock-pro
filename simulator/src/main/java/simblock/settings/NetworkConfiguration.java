@@ -16,6 +16,13 @@ public class NetworkConfiguration {
       Arrays.asList("NORTH_AMERICA", "EUROPE", "SOUTH_AMERICA", "ASIA_PACIFIC", "JAPAN",
                     "AUSTRALIA"
       ));
+  /**
+   * 每个区域的hashrate,为了数据类型的统一，rate全部乘100，
+   * 所以，STDEV_OF_MINING_POWER和AVERAGE_MINING_POWER全部除100
+   */
+  public static final int[] HASHRATE_LIST={
+    3425, 2181, 890, 880, 691, 598, 379, 343,328, 286,
+  };
 
   /**
    * LATENCY[i][j] is average latency from REGION_LIST[i] to REGION_LIST[j]  平均时延
