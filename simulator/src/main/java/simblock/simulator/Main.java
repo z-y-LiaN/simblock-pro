@@ -1,8 +1,7 @@
 package simblock.simulator;
 
 
-import static simblock.settings.NetworkConfiguration.HASHRATE_LIST;
-import static simblock.settings.NetworkConfiguration.REGION_KIND_LIST;
+import static simblock.settings.NetworkConfiguration.*;
 import static simblock.settings.SimulationConfiguration.ALGO;
 import static simblock.settings.SimulationConfiguration.AVERAGE_MINING_POWER;
 import static simblock.settings.SimulationConfiguration.END_BLOCK_HEIGHT;
@@ -433,8 +432,8 @@ public class Main {
             degreeList.add(node_degree);
             //区域
             String region = (String) nodeInfo.get("region");
-            for (int j = 0; j < REGION_KIND_LIST.length; j++) {
-                if (REGION_KIND_LIST[j].equals(region))
+            for (int j = 0; j < REGION_LIST.size(); j++) {
+                if (REGION_LIST.get(j).equals(region))
                     regionList.add(j);
             }
             //邻居

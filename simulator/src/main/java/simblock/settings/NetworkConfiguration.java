@@ -13,17 +13,10 @@ public class NetworkConfiguration {
    * Regions where nodes can exist.节点存在的区域
    */
   public static final List<String> REGION_LIST = new ArrayList<>(
-      Arrays.asList("NORTH_AMERICA", "EUROPE", "SOUTH_AMERICA", "ASIA_PACIFIC", "JAPAN",
-                    "AUSTRALIA"
+      Arrays.asList("中国", "美国", "俄罗斯",
+              "哈萨克斯坦", "其他", "加拿大", "马来西亚",
+              "伊朗", "德国", "爱尔兰"
       ));
-  /**
-   * 重写节点的区域
-   */
-  public static  final String[] REGION_KIND_LIST ={
-          "中国", "美国", "俄罗斯",
-          "哈萨克斯坦", "其他", "加拿大", "马来西亚",
-          "伊朗", "德国", "爱尔兰"
-  };
   /**
    * 每个区域的hashrate,为了数据类型的统一，rate全部乘100，
    * 所以，STDEV_OF_MINING_POWER和AVERAGE_MINING_POWER全部除100
