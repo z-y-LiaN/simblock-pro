@@ -41,11 +41,26 @@ public class NetworkConfiguration {
       {151, 252, 301, 58, 12, 126},
       {189, 294, 322, 198, 126, 16}
   };
-
+  /**
+   * LATENCY[i][j] is average latency from REGION_LIST[i] to REGION_LIST[j]
+   * Unit: millisecond, for year 2022 (user defined) init_data.json里面的数据有10个区域，
+   */
+  private static final long[][] LATENCY_2022 = {
+          {100,100,100,100,100,100,100,100,100,100},
+          {100,100,100,100,100,100,100,100,100,100},
+          {100,100,100,100,100,100,100,100,100,100},
+          {100,100,100,100,100,100,100,100,100,100},
+          {100,100,100,100,100,100,100,100,100,100},
+          {100,100,100,100,100,100,100,100,100,100},
+          {100,100,100,100,100,100,100,100,100,100},
+          {100,100,100,100,100,100,100,100,100,100},
+          {100,100,100,100,100,100,100,100,100,100},
+          {100,100,100,100,100,100,100,100,100,100},
+  };
   /**
    * List of latency assigned to each region. (unit: millisecond)
    */
-  public static final long[][] LATENCY = LATENCY_2019;
+  public static final long[][] LATENCY = LATENCY_2022;
 
   /**
    * List of download bandwidth assigned to each region, and last element is Inter-regional
@@ -63,12 +78,20 @@ public class NetworkConfiguration {
       52000000, 40000000, 18000000, 22800000,
       22800000, 29900000, 6 * 1000000
   };
-
+  /**
+   * List of download bandwidth assigned to each region, and last element is Inter-regional
+   * bandwidth. (unit: bit per second) for year 2022 (zyl defined)：取的上面2019的平均
+   */
+  private static final long[] DOWNLOAD_BANDWIDTH_2022 = {
+          31000000, 31000000, 31000000, 31000000, 31000000,
+          31000000, 31000000, 31000000, 31000000, 31000000,
+          6 * 1000000
+  };
   /**
    * List of download bandwidth assigned to each region, and last element is Inter-regional
    * bandwidth. (unit: bit per second)
    */
-  public static final long[] DOWNLOAD_BANDWIDTH = DOWNLOAD_BANDWIDTH_2019;
+  public static final long[] DOWNLOAD_BANDWIDTH = DOWNLOAD_BANDWIDTH_2022;
 
   /**
    * List of upload bandwidth assigned to each region. (unit: bit per second), and last element
@@ -86,12 +109,21 @@ public class NetworkConfiguration {
       19200000, 20700000, 5800000, 15700000,
       10200000, 11300000, 6 * 1000000
   };
+  /**
+   * List of upload bandwidth assigned to each region. (unit: bit per second), and last element
+   * is Inter-regional bandwidth for year 2022 (zyl defined)：取的上面2019的平均
+   */
+  private static final long[] UPLOAD_BANDWIDTH_2022 = {
+          13800000, 13800000, 13800000,13800000,13800000,
+          13800000,13800000,13800000,13800000,13800000,
+          6 * 1000000
+  };
 
   /**
    * List of upload bandwidth assigned to each region. (unit: bit per second), and last element
    * is Inter-regional bandwidth.
    */
-  public static final long[] UPLOAD_BANDWIDTH = UPLOAD_BANDWIDTH_2019;
+  public static final long[] UPLOAD_BANDWIDTH = UPLOAD_BANDWIDTH_2022;
 
   /**
    * Region distribution Bitcoin 2015.
