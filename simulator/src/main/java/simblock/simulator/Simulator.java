@@ -2,7 +2,9 @@ package simblock.simulator;
 
 import static simblock.simulator.Timer.getCurrentTime;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import simblock.block.Block;
@@ -135,17 +137,22 @@ public class Simulator {
     //TODO block does not have a toString method, what is printed here
     System.out.println(block + ":" + block.getHeight());
 
-    double total_proragation_time=0.0;
+    double total_propagation_time=0.0;
     for (Map.Entry<Integer, Long> timeEntry : propagation.entrySet()) {
-//      System.out.println(timeEntry.getKey() + "," + timeEntry.getValue());
-      total_proragation_time+=timeEntry.getValue()/1000.0;
+      System.out.println(timeEntry.getKey() + "," + timeEntry.getValue());
+      total_propagation_time+=timeEntry.getValue()/1000.0;
     }
-    System.out.println("size = "+propagation.size());
-    System.out.println("该区块的平均传输时间 "+total_proragation_time/propagation.size()+" s");
-
+//    Map.Entry<Integer, Long> tail=null;
+//    Iterator<Map.Entry<Integer, Long>> iterator=propagation.entrySet().iterator();
+//    while(iterator.hasNext()){
+//      tail=iterator.next();
+//    }
+//    System.out.println("last time "+tail.getValue());
+//    System.out.println("total nodes = "+propagation.size());
+//    System.out.println("该区块的平均传输时间 "+tail.getValue()/propagation.size()+" ms");
+    System.out.println("该区块的平均传输时间 "+total_propagation_time/propagation.size()+" s");
     System.out.println();
   }
-
   /**
    * Print propagation information about all blocks, internally relying on
    * {@link Simulator#printPropagation(Block, LinkedHashMap)}.
