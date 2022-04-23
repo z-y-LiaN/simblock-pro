@@ -294,6 +294,14 @@ public class Main {
         return list;
     }
 
+    public static ArrayList<Boolean> makeRandomListTRUE() {
+        ArrayList<Boolean> list = new ArrayList<Boolean>();
+        for (int i = 0; i < NUM_OF_NODES; i++) {
+            list.add(true);
+        }
+        return list;
+    }
+
     /**
      * Generates a random mining power expressed as Hash Rate, and is the number of mining (hash
      * calculation) executed per millisecond.
@@ -422,10 +430,10 @@ public class Main {
         NUM_OF_NODES = node_total;
 
         // List of nodes using compact block relay.使用紧凑块中继的节点列表。
-        List<Boolean> useCBRNodes = makeRandomList(CBR_USAGE_RATE);
+        List<Boolean> useCBRNodes = makeRandomListTRUE();
 
         // List of churn nodes.流失节点列表
-        List<Boolean> churnNodes = makeRandomList(CHURN_NODE_RATE);
+        List<Boolean> churnNodes = makeRandomListTRUE();
 
         /* 确定numNodes个节点 所在的区域，度数、mining power(算力)，路由表，共识算法等等 */
         ArrayList<Integer> degreeList = new ArrayList<>();

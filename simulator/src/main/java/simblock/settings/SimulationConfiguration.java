@@ -31,7 +31,7 @@ public class SimulationConfiguration {
   /**
    * The expected value of block generation interval. The difficulty of mining is automatically
    * adjusted by this value and the sum of mining power. (unit: millisecond)
-   * 块生成的时间间隔。The difficulty of mining 由该值与 mining power之和自动调整。(单位:毫秒)
+   * 出块时间设置。The difficulty of mining 由该值与 mining power之和自动调整。(单位:毫秒)
    */
   public static final long INTERVAL = 1000 * 60 * 10;//1000*60;//1000*30*5;//1000*60*10;
 

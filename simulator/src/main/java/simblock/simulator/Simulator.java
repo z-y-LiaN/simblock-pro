@@ -137,6 +137,9 @@ public class Simulator {
     for (Map.Entry<Integer, Long> timeEntry : propagation.entrySet()) {
       System.out.println(timeEntry.getKey() + "," + timeEntry.getValue());
     }
+
+//    System.out.println("endtime = "+propagation.get(propagation.size()-1));
+//    System.out.println("该区块的平均传输时间"+propagation.get(propagation.size()-1)*1.0/propagation.size()+" ms");
     System.out.println();
   }
 
