@@ -25,12 +25,7 @@ import static simblock.simulator.Timer.runTask;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -415,6 +410,49 @@ public class Main {
             e.printStackTrace();
             return null;
         }
+    }
+
+
+    /**
+     * 根据输入数据，确定每个节点的r值
+     * 同一个region内的所有节点的r值随机 呈Gaussion分布
+     * 返回一个HashMap；每个nodeID指定一个r值
+     * String：nodeID
+     * Double：r值
+     */
+    public static HashMap<String, Double> getValueOfRByGaussion(String filePath) {
+        /**
+         * ArrayList.get(i)：当前regionID=i 里面包含的所有Node :vector
+         */
+        ArrayList<Vector<String>> allNodesByRegionID = new ArrayList<>();
+        String s = Main.readJsonFile(filePath);
+        JSONObject jobj = JSON.parseObject(s);
+        Integer node_total = (Integer) jobj.get("Num");
+        /**
+         * 将所有节点按region分类
+         */
+        for (int i = 1; i <= node_total; i++) {
+            String name = "nodeNum_" + i;
+            JSONObject nodeInfo = jobj.getJSONObject(name);
+            String region = (String) nodeInfo.get("region");
+            String nodeID = (String) nodeInfo.get("nodeid");
+            for (int j = 0; j < REGION_LIST.size(); j++) {
+                if (REGION_LIST.get(j).equals(region))
+                    allNodesByRegionID.get(j).add(nodeID);
+            }
+        }
+        /**
+         * 每类region里面的每一个node的r值 随机Gaussian分布
+         * 每个nodeID对应一个r值
+         */
+        HashMap<String, Double> nodeID_R = new HashMap<>();
+        for (int i = 0; i < allNodesByRegionID.size(); i++) {
+            Vector<String> region = allNodesByRegionID.get(i);
+            for (int j = 0; j < region.size(); j++) {
+                nodeID_R.put(region.get(j), random.nextGaussian());
+            }
+        }
+        return nodeID_R;
     }
 
 
