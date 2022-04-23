@@ -109,10 +109,10 @@ public class Main {
 //        String filePath = "simulator/src/dist/conf/data/init_data_DEGREE_1.5%.json";
 //        String filePath = "simulator/src/dist/conf/data/init_data_DEGREE_2%.json";
 
-        String filePath = "simulator/src/dist/conf/data/init_data_MY_1%.json";
+//        String filePath = "simulator/src/dist/conf/data/init_data_MY_1%.json";
 //        String filePath = "simulator/src/dist/conf/data/init_data_MY_1.5%.json";
 //        String filePath = "simulator/src/dist/conf/data/init_data_MY_2%.json";
-//        String filePath = "simulator/src/dist/conf/data/init_data_row.json";
+        String filePath = "simulator/src/dist/conf/data/init_data_row.json";
         constructNetworkWithGivenFile(filePath);
 //    constructNetworkWithAllNodes(NUM_OF_NODES);
 

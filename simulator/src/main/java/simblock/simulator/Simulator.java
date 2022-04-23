@@ -134,12 +134,15 @@ public class Simulator {
     // Print block and its height
     //TODO block does not have a toString method, what is printed here
     System.out.println(block + ":" + block.getHeight());
-    for (Map.Entry<Integer, Long> timeEntry : propagation.entrySet()) {
-      System.out.println(timeEntry.getKey() + "," + timeEntry.getValue());
-    }
 
-//    System.out.println("endtime = "+propagation.get(propagation.size()-1));
-//    System.out.println("该区块的平均传输时间"+propagation.get(propagation.size()-1)*1.0/propagation.size()+" ms");
+    double total_proragation_time=0.0;
+    for (Map.Entry<Integer, Long> timeEntry : propagation.entrySet()) {
+//      System.out.println(timeEntry.getKey() + "," + timeEntry.getValue());
+      total_proragation_time+=timeEntry.getValue()/1000.0;
+    }
+    System.out.println("size = "+propagation.size());
+    System.out.println("该区块的平均传输时间 "+total_proragation_time/propagation.size()+" s");
+
     System.out.println();
   }
 
