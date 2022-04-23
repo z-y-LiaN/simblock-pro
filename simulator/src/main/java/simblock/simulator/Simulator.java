@@ -22,6 +22,7 @@ public class Simulator {
    */
   private static final ArrayList<Node> simulatedNodes = new ArrayList<>();
 
+
   /**
    * The target block interval in milliseconds.
    */
@@ -139,7 +140,7 @@ public class Simulator {
 
     double total_propagation_time=0.0;
     for (Map.Entry<Integer, Long> timeEntry : propagation.entrySet()) {
-      System.out.println(timeEntry.getKey() + "," + timeEntry.getValue());
+//      System.out.println(timeEntry.getKey() + "," + timeEntry.getValue());
       total_propagation_time+=timeEntry.getValue()/1000.0;
     }
 //    Map.Entry<Integer, Long> tail=null;

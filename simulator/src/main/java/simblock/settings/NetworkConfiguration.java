@@ -18,7 +18,7 @@ public class NetworkConfiguration {
               "伊朗", "德国", "爱尔兰"
       ));
   /**
-   * 每个区域的hashrate,为了数据类型的统一，rate全部乘100，
+   * 每个区域的 hash rate,为了数据类型的统一，rate全部乘100，
    * 所以，STDEV_OF_MINING_POWER和AVERAGE_MINING_POWER全部除100
    */
   public static final int[] HASHRATE_LIST={

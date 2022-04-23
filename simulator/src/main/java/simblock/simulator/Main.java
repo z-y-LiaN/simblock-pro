@@ -72,13 +72,20 @@ public class Main {
     //TODO use logger
     public static PrintWriter STATIC_JSON_FILE;
 
+    public static  PrintWriter NODEID_R_FILE;
+
+    //原网络（没有移除任何关键节点的网络）的nodeID和r的键值对
+    public static HashMap<String, Object> nodeID_R;
+
     static {
         try {
             OUT_JSON_FILE = new PrintWriter(
                     new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./output.json")))));
             STATIC_JSON_FILE = new PrintWriter(
                     new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./static.json")))));
-        } catch (IOException e) {
+            NODEID_R_FILE =new PrintWriter(
+                    new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./nodeid_r.json")))));
+             } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -107,8 +114,15 @@ public class Main {
 //        String filePath = "simulator/src/dist/conf/data/init_data_MY_1%.json";
 //        String filePath = "simulator/src/dist/conf/data/init_data_MY_1.5%.json";
 //        String filePath = "simulator/src/dist/conf/data/init_data_MY_2%.json";
-        String filePath = "simulator/src/dist/conf/data/init_data_row.json";
-        constructNetworkWithGivenFile(filePath);
+       /** 原网络（没有移除任何关键节点的网络）的数据 */
+        String originPath = "simulator/src/dist/conf/data/init_data_row.json";
+        nodeID_R = getValueOfRByGaussion(originPath);
+
+        /** （移除/没有移除任何关键节点的网络）的数据 */
+        String processedPath="simulator/src/dist/conf/data/init_data_MY_1%.json";
+
+
+        constructNetworkWithGivenFile(processedPath);
 //    constructNetworkWithAllNodes(NUM_OF_NODES);
 
         // 初始区块高度, we stop at END_BLOCK_HEIGHT;在指定区块高度结束;区块高度就是目前生成了多少个区块而已
@@ -321,6 +335,13 @@ public class Main {
         return Math.max((int) (r * STDEV_OF_MINING_POWER + AVERAGE_MINING_POWER) * HASHRATE_LIST[regionID], 1);
     }
 
+    /**
+     * 重写genMiningPower方法 ,r先前已经确定，根据nodeID获取对应的r     *
+     */
+    public static int genMiningPower(String nodeID, Integer regionID) {
+        double r = (double)nodeID_R.get(nodeID);
+        return Math.max((int) (r * STDEV_OF_MINING_POWER + AVERAGE_MINING_POWER) * HASHRATE_LIST[regionID], 1);
+    }
 
     /**
      * 根据所提供的节点数量 构建网络;
@@ -420,11 +441,12 @@ public class Main {
      * String：nodeID
      * Double：r值
      */
-    public static HashMap<String, Double> getValueOfRByGaussion(String filePath) {
+    public static HashMap<String, Object> getValueOfRByGaussion(String filePath) {
         /**
          * ArrayList.get(i)：当前regionID=i 里面包含的所有Node :vector
          */
-        ArrayList<Vector<String>> allNodesByRegionID = new ArrayList<>();
+        HashMap<Integer,Vector<String>> allNodesByRegionID=new HashMap<>();
+        for(int i=0;i<REGION_LIST.size();i++) allNodesByRegionID.put(i,new Vector<>());
         String s = Main.readJsonFile(filePath);
         JSONObject jobj = JSON.parseObject(s);
         Integer node_total = (Integer) jobj.get("Num");
@@ -436,22 +458,34 @@ public class Main {
             JSONObject nodeInfo = jobj.getJSONObject(name);
             String region = (String) nodeInfo.get("region");
             String nodeID = (String) nodeInfo.get("nodeid");
+
             for (int j = 0; j < REGION_LIST.size(); j++) {
-                if (REGION_LIST.get(j).equals(region))
-                    allNodesByRegionID.get(j).add(nodeID);
+                if (REGION_LIST.get(j).equals(region)){
+                    Vector<String> temp=allNodesByRegionID.get(j);
+                    temp.add(nodeID);
+                    allNodesByRegionID.put(j,temp);
+                    System.out.println(allNodesByRegionID);
+                    break;
+                }
             }
         }
         /**
          * 每类region里面的每一个node的r值 随机Gaussian分布
          * 每个nodeID对应一个r值
          */
-        HashMap<String, Double> nodeID_R = new HashMap<>();
+        HashMap<String, Object> nodeID_R = new HashMap<String,Object>();
+//        System.out.println(allNodesByRegionID.size());
         for (int i = 0; i < allNodesByRegionID.size(); i++) {
             Vector<String> region = allNodesByRegionID.get(i);
+//            System.out.println(region.size());
             for (int j = 0; j < region.size(); j++) {
                 nodeID_R.put(region.get(j), random.nextGaussian());
             }
         }
+        JSONObject nodeID_R_Json = new JSONObject(nodeID_R);
+        NODEID_R_FILE.print(nodeID_R_Json);
+        NODEID_R_FILE.flush();
+        NODEID_R_FILE.close();
         return nodeID_R;
     }
 
@@ -476,6 +510,7 @@ public class Main {
         /* 确定numNodes个节点 所在的区域，度数、mining power(算力)，路由表，共识算法等等 */
         ArrayList<Integer> degreeList = new ArrayList<>();
         ArrayList<Integer> regionList = new ArrayList<>();
+        ArrayList<String> nodeIDList=new ArrayList<>();
         ArrayList<ArrayList<Integer>> neighborList = new ArrayList<ArrayList<Integer>>();
 
 
@@ -485,12 +520,13 @@ public class Main {
         for (int i = 1; i <= node_total; i++) {
             String name = "nodeNum_" + i;
             JSONObject nodeInfo = jobj.getJSONObject(name);
-            if (nodeInfo == null) continue;
+
             //度数
-//            if(nodeInfo.get("NumConnections")==null)
-//                System.out.println(name);
             Integer node_degree = (Integer) nodeInfo.get("NumConnections");
             degreeList.add(node_degree);
+
+            String nodeID=(String)nodeInfo.get("nodeid");
+            nodeIDList.add(nodeID);
             //区域
             String region = (String) nodeInfo.get("region");
             for (int j = 0; j < REGION_LIST.size(); j++) {
@@ -508,7 +544,7 @@ public class Main {
 
         for (int id = 1; id <= node_total; id++) {
             Node node = new Node(
-                    id, degreeList.get(id - 1) + 1, regionList.get(id - 1), genMiningPower(regionList.get(id - 1)), TABLE,
+                    id, degreeList.get(id - 1) + 1, regionList.get(id - 1), genMiningPower(nodeIDList.get(id-1),regionList.get(id - 1)), TABLE,
                     ALGO, useCBRNodes.get(id - 1), churnNodes.get(id - 1)
             );
 //            System.out.println("算力： "+node.getMiningPower());
