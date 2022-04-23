@@ -168,6 +168,6 @@ public class Simulator {
     for (int i = 0; i < observedBlocks.size(); i++) {
       printPropagation(observedBlocks.get(i), observedPropagations.get(i));
     }
-    System.out.println("所有区块的平均传输时间 ："+averageSum/(END_BLOCK_HEIGHT+1 )+ " s");
+    System.out.println("平均出块时间 ："+averageSum/(END_BLOCK_HEIGHT+1 )+ " s");
   }
 }

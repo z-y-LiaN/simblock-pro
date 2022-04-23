@@ -140,7 +140,7 @@ public class Main {
         }
 
         /** （移除/没有移除任何关键节点的网络）的数据 */
-        String processedPath="simulator/src/dist/conf/data/init_data_MY_1%.json";
+        String processedPath="simulator/src/dist/conf/data/init_data_MY_1.5%.json";
 
 
         constructNetworkWithGivenFile(processedPath);
