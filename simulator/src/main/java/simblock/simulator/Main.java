@@ -75,7 +75,7 @@ public class Main {
     public static  PrintWriter NODEID_R_FILE;
 
     //原网络（没有移除任何关键节点的网络）的nodeID和r的键值对
-    public static HashMap<String, Object> nodeID_R;
+    public static HashMap<String, Object> nodeID_R = new HashMap<>();
 
     static {
         try {
@@ -114,16 +114,36 @@ public class Main {
 //        String filePath = "simulator/src/dist/conf/data/init_data_MY_1%.json";
 //        String filePath = "simulator/src/dist/conf/data/init_data_MY_1.5%.json";
 //        String filePath = "simulator/src/dist/conf/data/init_data_MY_2%.json";
-       /** 原网络（没有移除任何关键节点的网络）的数据 */
-        String originPath = "simulator/src/dist/conf/data/init_data_row.json";
-        nodeID_R = getValueOfRByGaussion(originPath);
+       /**
+        * 原网络（没有移除任何关键节点的网络）的数据 生成nodeID_R的键值对
+        * 初次运行，先置generate = true；生成nodeID-R键值对到src/dist/output/output.json
+        * 手动将内容复制到src/dist/conf/data/nodeid_r.json
+        * 然后手动置generate = false; 运行移除关键节点后的数据
+        */
+        Boolean generate=false;
+        if(generate){
+            String originPath = "simulator/src/dist/conf/data/init_data_row.json";
+            nodeID_R = getValueOfRByGaussion(originPath);
+            System.out.println("nodeID-R generate success");
+            return ;
+        }
+
+        /**
+         * 读入nodeid_r.json
+         */
+        String nodeid_r_path="simulator/src/dist/conf/data/nodeid_r.json";
+        String s = Main.readJsonFile(nodeid_r_path);
+        JSONObject jobj = JSON.parseObject(s);
+        Map<String, Object> map =jobj;
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            nodeID_R.put(entry.getKey(),Double.parseDouble(entry.getValue().toString()));
+        }
 
         /** （移除/没有移除任何关键节点的网络）的数据 */
         String processedPath="simulator/src/dist/conf/data/init_data_MY_1%.json";
 
 
         constructNetworkWithGivenFile(processedPath);
-//    constructNetworkWithAllNodes(NUM_OF_NODES);
 
         // 初始区块高度, we stop at END_BLOCK_HEIGHT;在指定区块高度结束;区块高度就是目前生成了多少个区块而已
         int currentBlockHeight = 1;
@@ -339,6 +359,7 @@ public class Main {
      * 重写genMiningPower方法 ,r先前已经确定，根据nodeID获取对应的r     *
      */
     public static int genMiningPower(String nodeID, Integer regionID) {
+
         double r = (double)nodeID_R.get(nodeID);
         return Math.max((int) (r * STDEV_OF_MINING_POWER + AVERAGE_MINING_POWER) * HASHRATE_LIST[regionID], 1);
     }
@@ -464,7 +485,7 @@ public class Main {
                     Vector<String> temp=allNodesByRegionID.get(j);
                     temp.add(nodeID);
                     allNodesByRegionID.put(j,temp);
-                    System.out.println(allNodesByRegionID);
+                   // System.out.println(allNodesByRegionID);
                     break;
                 }
             }
@@ -474,10 +495,8 @@ public class Main {
          * 每个nodeID对应一个r值
          */
         HashMap<String, Object> nodeID_R = new HashMap<String,Object>();
-//        System.out.println(allNodesByRegionID.size());
         for (int i = 0; i < allNodesByRegionID.size(); i++) {
             Vector<String> region = allNodesByRegionID.get(i);
-//            System.out.println(region.size());
             for (int j = 0; j < region.size(); j++) {
                 nodeID_R.put(region.get(j), random.nextGaussian());
             }

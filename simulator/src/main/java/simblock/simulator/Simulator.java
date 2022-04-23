@@ -1,5 +1,6 @@
 package simblock.simulator;
 
+import static simblock.settings.SimulationConfiguration.END_BLOCK_HEIGHT;
 import static simblock.simulator.Timer.getCurrentTime;
 
 import java.math.BigInteger;
@@ -28,6 +29,10 @@ public class Simulator {
    */
   private static long targetInterval;
 
+  private static double averageSum = 0;
+  public  static  double getAverageSum(){
+      return averageSum;
+  }
 
   public static ArrayList<Node> getSimulatedNodes() {
     return simulatedNodes;
@@ -152,6 +157,7 @@ public class Simulator {
 //    System.out.println("total nodes = "+propagation.size());
 //    System.out.println("该区块的平均传输时间 "+tail.getValue()/propagation.size()+" ms");
     System.out.println("该区块的平均传输时间 "+total_propagation_time/propagation.size()+" s");
+    averageSum += total_propagation_time/propagation.size();
     System.out.println();
   }
   /**
@@ -162,5 +168,6 @@ public class Simulator {
     for (int i = 0; i < observedBlocks.size(); i++) {
       printPropagation(observedBlocks.get(i), observedPropagations.get(i));
     }
+    System.out.println("所有区块的平均传输时间 ："+averageSum/(END_BLOCK_HEIGHT+1 )+ " s");
   }
 }
