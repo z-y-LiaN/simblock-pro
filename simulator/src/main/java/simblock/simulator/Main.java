@@ -101,8 +101,18 @@ public class Main {
         // 打印区域
         printRegion();
 
-        // 构建指定数量的区块链网络,这里路径之后可以改一下
-        String filePath = "D:\\Desktop\\2022信安\\simblock-master\\simblock-master\\simulator\\src\\dist\\conf\\init_data.json";
+//        String filePath = "simulator/src/dist/conf/data/init_data_BETWEENNESS.json";
+//        String filePath = "simulator/src/dist/conf/data/init_data_BETWEENNESS_1.5%.json";
+//        String filePath = "simulator/src/dist/conf/data/init_data_BETWEENNESS_2%.json";
+
+//        String filePath = "simulator/src/dist/conf/data/init_data_DEGREE.json";
+//        String filePath = "simulator/src/dist/conf/data/init_data_DEGREE_1.5%.json";
+//        String filePath = "simulator/src/dist/conf/data/init_data_DEGREE_2%.json";
+
+        String filePath = "simulator/src/dist/conf/data/init_data_MY_1%.json";
+//        String filePath = "simulator/src/dist/conf/data/init_data_MY_1.5%.json";
+//        String filePath = "simulator/src/dist/conf/data/init_data_MY_2%.json";
+//        String filePath = "simulator/src/dist/conf/data/init_data_row.json";
         constructNetworkWithGivenFile(filePath);
 //    constructNetworkWithAllNodes(NUM_OF_NODES);
 
@@ -408,6 +418,9 @@ public class Main {
         String s = Main.readJsonFile(filePath);
         JSONObject jobj = JSON.parseObject(s);
 
+        Integer node_total = (Integer) jobj.get("Num");
+        NUM_OF_NODES = node_total;
+
         // List of nodes using compact block relay.使用紧凑块中继的节点列表。
         List<Boolean> useCBRNodes = makeRandomList(CBR_USAGE_RATE);
 
@@ -419,15 +432,17 @@ public class Main {
         ArrayList<Integer> regionList = new ArrayList<>();
         ArrayList<ArrayList<Integer>> neighborList = new ArrayList<ArrayList<Integer>>();
 
-        Integer node_total = (Integer) jobj.get("Num");
-        NUM_OF_NODES = node_total;
+
         /**
          *  处理json中的每一个节点
          */
         for (int i = 1; i <= node_total; i++) {
             String name = "nodeNum_" + i;
             JSONObject nodeInfo = jobj.getJSONObject(name);
+            if (nodeInfo == null) continue;
             //度数
+//            if(nodeInfo.get("NumConnections")==null)
+//                System.out.println(name);
             Integer node_degree = (Integer) nodeInfo.get("NumConnections");
             degreeList.add(node_degree);
             //区域
