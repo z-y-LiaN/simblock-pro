@@ -140,7 +140,7 @@ public class Main {
         }
 
         /** （移除/没有移除任何关键节点的网络）的数据 */
-        String processedPath="simulator/src/dist/conf/data/init_data_MY_1.5%.json";
+        String processedPath="simulator/src/dist/conf/data/init_data_BETWEENNESS_3%.json";
 
 
         constructNetworkWithGivenFile(processedPath);
@@ -563,7 +563,7 @@ public class Main {
 
         for (int id = 1; id <= node_total; id++) {
             Node node = new Node(
-                    id, degreeList.get(id - 1) + 1, regionList.get(id - 1), genMiningPower(nodeIDList.get(id-1),regionList.get(id - 1)), TABLE,
+                    id, degreeList.get(id - 1) + 1, regionList.get(id - 1), genMiningPower(regionList.get(id - 1)), TABLE,
                     ALGO, useCBRNodes.get(id - 1), churnNodes.get(id - 1)
             );
 //            System.out.println("算力： "+node.getMiningPower());

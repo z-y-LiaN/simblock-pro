@@ -1,6 +1,7 @@
 package simblock.simulator;
 
 import static simblock.settings.SimulationConfiguration.END_BLOCK_HEIGHT;
+import static simblock.settings.SimulationConfiguration.NUM_OF_NODES;
 import static simblock.simulator.Timer.getCurrentTime;
 
 import java.math.BigInteger;
@@ -30,8 +31,19 @@ public class Simulator {
   private static long targetInterval;
 
   private static double averageSum = 0;
+
+  private static double transmitSum = 0;
+
+  private static double blockgenSum = 0;
+
   public  static  double getAverageSum(){
       return averageSum;
+  }
+  public  static  double gettransmitSum(){
+    return transmitSum;
+  }
+  public  static  double getBlockgenSum(){
+    return blockgenSum;
   }
 
   public static ArrayList<Node> getSimulatedNodes() {
@@ -142,12 +154,19 @@ public class Simulator {
     // Print block and its height
     //TODO block does not have a toString method, what is printed here
     System.out.println(block + ":" + block.getHeight());
-
+    blockgenSum=block.getTime();
+    long ret=0;
+    int count=0;
     double total_propagation_time=0.0;
     for (Map.Entry<Integer, Long> timeEntry : propagation.entrySet()) {
 //      System.out.println(timeEntry.getKey() + "," + timeEntry.getValue());
       total_propagation_time+=timeEntry.getValue()/1000.0;
+      if (count<=(NUM_OF_NODES*0.51)){
+        count++;
+        ret=timeEntry.getValue();
+      }
     }
+    transmitSum+=ret;
 //    Map.Entry<Integer, Long> tail=null;
 //    Iterator<Map.Entry<Integer, Long>> iterator=propagation.entrySet().iterator();
 //    while(iterator.hasNext()){
@@ -166,8 +185,15 @@ public class Simulator {
    */
   public static void printAllPropagation() {
     for (int i = 0; i < observedBlocks.size(); i++) {
-      printPropagation(observedBlocks.get(i), observedPropagations.get(i));
+     printPropagation(observedBlocks.get(i), observedPropagations.get(i));
     }
-    System.out.println("平均出块时间 ："+averageSum/(END_BLOCK_HEIGHT+1 )+ " s");
+    /**
+     *  共识达成时间 ： 该区块产生的消息被51%的节点接受的时间 ， 即网络中的节点达成共识该区块存在
+     *  块传播时间 ： 该区块产生的消息传播给某个节点所用的时间
+     *  出块时间 ： 该块产生所用的时间 ， 该区块产生的时间 减去 前一区块产生的时间
+     */
+    System.out.println("平均共识达成时间 ："+transmitSum/(END_BLOCK_HEIGHT+1)+"  ms");
+    System.out.println("平均块传播时间 ："+averageSum/(END_BLOCK_HEIGHT+1)+ " s");
+    System.out.println("平均出块时间 ："+blockgenSum/(END_BLOCK_HEIGHT+1)+ " ms");
   }
 }
