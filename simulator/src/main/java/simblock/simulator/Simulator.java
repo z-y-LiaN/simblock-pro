@@ -4,6 +4,7 @@ import static simblock.settings.SimulationConfiguration.END_BLOCK_HEIGHT;
 import static simblock.settings.SimulationConfiguration.NUM_OF_NODES;
 import static simblock.simulator.Timer.getCurrentTime;
 
+import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -183,7 +184,7 @@ public class Simulator {
    * Print propagation information about all blocks, internally relying on
    * {@link Simulator#printPropagation(Block, LinkedHashMap)}.
    */
-  public static void printAllPropagation() {
+  public static void printAllPropagation(PrintWriter OUT_DATA_FILE) {
     for (int i = 0; i < observedBlocks.size(); i++) {
      printPropagation(observedBlocks.get(i), observedPropagations.get(i));
     }
@@ -192,8 +193,17 @@ public class Simulator {
      *  块传播时间 ： 该区块产生的消息传播给某个节点所用的时间
      *  出块时间 ： 该块产生所用的时间 ， 该区块产生的时间 减去 前一区块产生的时间
      */
+
     System.out.println("平均共识达成时间 ："+transmitSum/(END_BLOCK_HEIGHT+1)+"  ms");
     System.out.println("平均块传播时间 ："+averageSum/(END_BLOCK_HEIGHT+1)+ " s");
     System.out.println("平均出块时间 ："+blockgenSum/(END_BLOCK_HEIGHT+1)+ " ms");
+    OUT_DATA_FILE.println("{");
+    OUT_DATA_FILE.println("\"平均共识达成时间\":"+transmitSum/(END_BLOCK_HEIGHT+1));
+    OUT_DATA_FILE.println(',');
+    OUT_DATA_FILE.println("\"平均块传播时间\":"+averageSum/(END_BLOCK_HEIGHT+1));
+    OUT_DATA_FILE.println(',');
+    OUT_DATA_FILE.println("\"平均出块时间\":"+blockgenSum/(END_BLOCK_HEIGHT+1));
+    OUT_DATA_FILE.println("}");
+    OUT_DATA_FILE.flush();
   }
 }

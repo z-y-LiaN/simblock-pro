@@ -73,7 +73,7 @@ public class Main {
     public static PrintWriter STATIC_JSON_FILE;
 
     public static  PrintWriter NODEID_R_FILE;
-
+    public static  PrintWriter OUT_DATA_FILE;
     //原网络（没有移除任何关键节点的网络）的nodeID和r的键值对
     public static HashMap<String, Object> nodeID_R = new HashMap<>();
 
@@ -85,6 +85,8 @@ public class Main {
                     new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./static.json")))));
             NODEID_R_FILE =new PrintWriter(
                     new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./nodeid_r.json")))));
+            OUT_DATA_FILE =new PrintWriter(
+                    new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./OUT_DATA_INI.json")))));
              } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,7 +101,6 @@ public class Main {
         //开始输出json
         OUT_JSON_FILE.print("[");
         OUT_JSON_FILE.flush();
-
         // 打印区域
         printRegion();
 
@@ -140,9 +141,7 @@ public class Main {
         }
 
         /** （移除/没有移除任何关键节点的网络）的数据 */
-        String processedPath="simulator/src/dist/conf/data/init_data_BETWEENNESS_3%.json";
-
-
+        String processedPath="simulator/src/dist/conf/data/init_data_MY3_5%.json";;
         constructNetworkWithGivenFile(processedPath);
 
         // 初始区块高度, we stop at END_BLOCK_HEIGHT;在指定区块高度结束;区块高度就是目前生成了多少个区块而已
@@ -169,7 +168,7 @@ public class Main {
         }
 
         // 打印所有区块的传播信息
-        printAllPropagation();
+        printAllPropagation(OUT_DATA_FILE);
 
         //TODO logger
         System.out.println();
