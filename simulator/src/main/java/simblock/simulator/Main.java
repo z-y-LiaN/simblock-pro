@@ -86,7 +86,7 @@ public class Main {
             NODEID_R_FILE =new PrintWriter(
                     new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./nodeid_r.json")))));
             OUT_DATA_FILE =new PrintWriter(
-                    new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./OUT_DATA_INI.json")))));
+                    new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./OUT_DATA_RAW.json")))));
              } catch (IOException e) {
             e.printStackTrace();
         }
@@ -141,7 +141,7 @@ public class Main {
         }
 
         /** （移除/没有移除任何关键节点的网络）的数据 */
-        String processedPath="simulator/src/dist/conf/data/init_data_MY3_5%.json";;
+        String processedPath="simulator/src/dist/conf/data/init_data_row.json";;
         constructNetworkWithGivenFile(processedPath);
 
         // 初始区块高度, we stop at END_BLOCK_HEIGHT;在指定区块高度结束;区块高度就是目前生成了多少个区块而已
