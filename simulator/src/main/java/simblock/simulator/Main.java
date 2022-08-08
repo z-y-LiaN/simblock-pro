@@ -306,7 +306,35 @@ public class Main {
         Collections.shuffle(list, random);
         return list;
     }
+    public static ArrayList<Integer> makeRandomList(double[] distribution ,boolean facum){
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        int index=0;
 
+        if(facum){
+            for(; index < distribution.length ; index++){
+                while(list.size() <= NUM_OF_NODES * distribution[index]){
+                    list.add(index);
+                }
+            }
+            while(list.size() < NUM_OF_NODES){
+                list.add(index);
+            }
+        }else{
+            double acumulative = 0.0;
+            for(; index < distribution.length ; index++){
+                acumulative += distribution[index];
+                while(list.size() <= NUM_OF_NODES * acumulative){
+                    list.add(index);
+                }
+            }
+            while(list.size() < NUM_OF_NODES){
+                list.add(index);
+            }
+        }
+
+        Collections.shuffle(list, random);
+        return list;
+    }
     /**
      * Populate the list using the rate.
      *
@@ -524,10 +552,11 @@ public class Main {
 
         // List of churn nodes.流失节点列表
         List<Boolean> churnNodes = makeRandomListTRUE();
-
+        double[] regionDistribution = getRegionDistribution();
         /* 确定numNodes个节点 所在的区域，度数、mining power(算力)，路由表，共识算法等等 */
         ArrayList<Integer> degreeList = new ArrayList<>();
         ArrayList<Integer> regionList = new ArrayList<>();
+        List<Integer> regionList_int  = makeRandomList(regionDistribution,false);
         ArrayList<String> nodeIDList=new ArrayList<>();
         ArrayList<ArrayList<Integer>> neighborList = new ArrayList<ArrayList<Integer>>();
 
@@ -562,7 +591,7 @@ public class Main {
 
         for (int id = 1; id <= node_total; id++) {
             Node node = new Node(
-                    id, degreeList.get(id - 1) + 1, regionList.get(id - 1), genMiningPower(regionList.get(id - 1)), TABLE,
+                    id, degreeList.get(id - 1) + 1, regionList_int.get(id - 1), genMiningPower(regionList.get(id - 1)), TABLE,
                     ALGO, useCBRNodes.get(id - 1), churnNodes.get(id - 1)
             );
 //            System.out.println("算力： "+node.getMiningPower());
@@ -573,7 +602,7 @@ public class Main {
             OUT_JSON_FILE.print("\"content\":{");
             OUT_JSON_FILE.print("\"timestamp\":0,");
             OUT_JSON_FILE.print("\"node-id\":" + id + ",");
-            OUT_JSON_FILE.print("\"region-id\":" + regionList.get(id - 1));
+            OUT_JSON_FILE.print("\"region-id\":" + regionList_int.get(id - 1));
             OUT_JSON_FILE.print("}");
             OUT_JSON_FILE.print("},");
             OUT_JSON_FILE.flush();
