@@ -91,6 +91,8 @@ public class Main {
                     （1）从nodefinder中传入以下参数：
          Boolean generate=false;
          String processedPath="simulator/src/dist/conf/data/(可变部分).json";
+         OUT_DATA_FILE =new PrintWriter(
+         new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./(可变部分).json")))));
                     获取参数实例看86-87代码
                     （2）nodefinder读入simblock-pro的控制台输出
                         此部分见nodefinder部分代码
