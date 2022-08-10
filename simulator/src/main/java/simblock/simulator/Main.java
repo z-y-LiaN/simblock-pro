@@ -1,38 +1,24 @@
 package simblock.simulator;
 
 
-import static simblock.settings.NetworkConfiguration.*;
-import static simblock.settings.SimulationConfiguration.ALGO;
-import static simblock.settings.SimulationConfiguration.AVERAGE_MINING_POWER;
-import static simblock.settings.SimulationConfiguration.END_BLOCK_HEIGHT;
-import static simblock.settings.SimulationConfiguration.INTERVAL;
-import static simblock.settings.SimulationConfiguration.NUM_OF_NODES;
-import static simblock.settings.SimulationConfiguration.STDEV_OF_MINING_POWER;
-import static simblock.settings.SimulationConfiguration.TABLE;
-import static simblock.settings.SimulationConfiguration.CBR_USAGE_RATE;
-import static simblock.settings.SimulationConfiguration.CHURN_NODE_RATE;
-import static simblock.simulator.Network.getDegreeDistribution;
-import static simblock.simulator.Network.getRegionDistribution;
-import static simblock.simulator.Network.printRegion;
-import static simblock.simulator.Simulator.addNode;
-import static simblock.simulator.Simulator.getSimulatedNodes;
-import static simblock.simulator.Simulator.printAllPropagation;
-import static simblock.simulator.Simulator.setTargetInterval;
-import static simblock.simulator.Timer.getCurrentTime;
-import static simblock.simulator.Timer.getTask;
-import static simblock.simulator.Timer.runTask;
-
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import simblock.block.Block;
 import simblock.node.Node;
 import simblock.task.AbstractMintingTask;
+
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
+
+import static simblock.settings.NetworkConfiguration.HASHRATE_LIST;
+import static simblock.settings.NetworkConfiguration.REGION_LIST;
+import static simblock.settings.SimulationConfiguration.*;
+import static simblock.simulator.Network.*;
+import static simblock.simulator.Simulator.*;
+import static simblock.simulator.Timer.*;
 
 
 public class Main {
@@ -52,8 +38,7 @@ public class Main {
 
     static {
         try {
-            CONF_FILE_URI = ClassLoader.getSystemResource("simulator.conf").toURI();
-
+            CONF_FILE_URI = URI.create("file:/D:/IdeaProjects/simblock-pro/simulator/src/dist/conf/simulator.conf");
             OUT_FILE_URI = CONF_FILE_URI.resolve(new URI("../output/"));
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -97,6 +82,28 @@ public class Main {
         final long start = System.currentTimeMillis();
         // 设置出块时间
         setTargetInterval(INTERVAL);
+        //jar传参测试
+        String str=args[0];
+        System.out.println(str);
+
+        /**
+         待解决问题：
+                    （1）从nodefinder中传入以下参数：
+         Boolean generate=false;
+         String processedPath="simulator/src/dist/conf/data/(可变部分).json";
+                    获取参数实例看86-87代码
+                    （2）nodefinder读入simblock-pro的控制台输出
+                        此部分见nodefinder部分代码
+
+         simblock-pro代码修改后在 构建 -> 构建工件 ->simblock-pro:jar->构建
+         构建好后 将 out/artifacts/simblock_pro_jar/simblock-pro.jar 和 simulator文件夹 移入 noderfinder根目录 替换原文件
+         如此就能执行修改好的jar文件了
+         **/
+
+
+
+
+
 
         //开始输出json
         OUT_JSON_FILE.print("[");
