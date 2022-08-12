@@ -36,9 +36,12 @@ public class Main {
 
     public static URI OUT_FILE_URI;//输出文件路径
 
+    public static URI PROJ_FILE_URI;//项目文件路径
+
     static {
         try {
-            CONF_FILE_URI = URI.create("file:/D:/IdeaProjects/simblock-pro/simulator/src/dist/conf/simulator.conf");
+            PROJ_FILE_URI = new File("D:/IdeaProjects/NodeFinder/").toURI();
+            CONF_FILE_URI = PROJ_FILE_URI.resolve("./simulator/src/dist/conf/simulator.conf");
             OUT_FILE_URI = CONF_FILE_URI.resolve(new URI("../output/"));
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -64,14 +67,10 @@ public class Main {
 
     static {
         try {
-            OUT_JSON_FILE = new PrintWriter(
-                    new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./output.json")))));
             STATIC_JSON_FILE = new PrintWriter(
                     new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./static.json")))));
             NODEID_R_FILE =new PrintWriter(
                     new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./nodeid_r.json")))));
-            OUT_DATA_FILE =new PrintWriter(
-                    new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./OUT_DATA_RAW.json")))));
              } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,9 +82,32 @@ public class Main {
         // 设置出块时间
         setTargetInterval(INTERVAL);
         //jar传参测试
-        String str=args[0];
-        System.out.println(str);
 
+        /*
+        String mode=args[0];
+        String method=args[1];
+        String rate=args[2];
+        */
+
+
+
+
+
+        String mode="false";
+        String method="RAW";
+        String rate="1";
+
+
+
+
+        try {
+            OUT_DATA_FILE =new PrintWriter(
+                    new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./OUT_DATA_"+method+'_'+rate+".json")))));
+            OUT_JSON_FILE = new PrintWriter(
+                    new BufferedWriter(new FileWriter(new File(OUT_FILE_URI.resolve("./output_"+method+'_'+rate+".json")))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         /**
          待解决问题：
                     （1）从nodefinder中传入以下参数：
@@ -130,11 +152,11 @@ public class Main {
         * 手动将内容复制到src/dist/conf/data/nodeid_r.json
         * 然后手动置generate = false; 运行移除关键节点后的数据
         */
-        Boolean generate=false;
+        Boolean generate=Boolean.valueOf(mode);
         if(generate){
-            String originPath = "simulator/src/dist/conf/data/init_data_row.json";
+            String originPath = "simulator/src/dist/conf/data/init_data_RAW_1%.json";
             nodeID_R = getValueOfRByGaussion(originPath);
-            System.out.println("nodeID-R generate success");
+        //    System.out.println("nodeID-R generate success");
             return ;
         }
 
@@ -150,7 +172,7 @@ public class Main {
         }
 
         /** （移除/没有移除任何关键节点的网络）的数据 */
-        String processedPath="simulator/src/dist/conf/data/init_data_row.json";;
+        String processedPath="simulator/src/dist/conf/data/init_data_"+method+'_'+rate+"%.json";;
         constructNetworkWithGivenFile(processedPath);
 
         // 初始区块高度, we stop at END_BLOCK_HEIGHT;在指定区块高度结束;区块高度就是目前生成了多少个区块而已
@@ -218,10 +240,13 @@ public class Main {
 
         //Log all orphans
         // TODO move to method and use logger
+        /*
         for (Block orphan : orphans) {
             System.out.println("孤块----" + orphan + ":" + orphan.getHeight());
         }
         System.out.println(averageOrphansSize);
+
+         */
 
     /*
     Log in format:
@@ -261,7 +286,7 @@ public class Main {
         long end = System.currentTimeMillis();
         simulationTime += end - start;
         // Log simulation time in milliseconds
-        System.out.println("simulationTime : " + simulationTime + " ms");
+     //   System.out.println("simulationTime : " + simulationTime + " ms");
 
     }
 
